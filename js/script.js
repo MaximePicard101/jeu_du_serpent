@@ -21,41 +21,90 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
         nouvellePartie(){
 
+            this.finPartie();
+
             this.affichagePointage(1);
 
-            this.pomme = new Pomme();     //avec this, on ratache l'objet a la fonction jeu
-            this.serpent = new Serpent();
+            this.pomme = new Pomme(this);     //avec this, on ratache l'objet a la fonction jeu, lit la pomme avec le jeu
+            this.serpent = new Serpent(this);
         }
 
         finPartie(){
+        if(this.pomme !== undefined){  //Si il y a ujne pomme quiexiste, supprime la
+            this.pomme.supprimePomme();
+            this.pomme = undefined;
+        }
 
         }
 
         affichagePointage(_lePointage){
-
             this.sortiPointage.innerHTML = _lePointage;   //on va placer notre pointage dans le html
-
-
         }
     }
+
+
+
 
     //Le serpent
 
     class Serpent{
 
-        constructor(){
+        constructor(_leJeu){
 
             console.log("creationDuSerpent");
+
+            this.leJeu = _leJeu;  //Permet de ne pas supprimer le parametre comme d'habitude;
         }
+
+        verifTouche(evt){
+
+        }
+
+        deplacement(dirCode){
+
+        }
+
+        controleSerpent(){
+
+        }
+
+        dessineCarre(x, y){
+
+        }
+
+        supprimeSerpent(){
+
+        }
+
     }
+
+
+
 
     //La pomme
 
     class Pomme{
 
-        constructor(){
-
+        constructor(_leJeu){
             console.log("creationDeLaPomme");
+
+            this.leJeu = _leJeu;  //Permet de ne pas supprimer le parametre comme d'habitude;
+
+            this.pomme = [];
+
+            this.ajoutePomme();
+        }
+
+        ajoutePomme(){
+
+            var posX = Math.floor(Math.random() * this.leJeu.grandeurGrille); //place la pomme aleatoirement dans la grille, avec un nombre plein grace a floor
+            var posY = Math.floor(Math.random() * this.leJeu.grandeurGrille); //place la pomme aleatoirement dans la grille, avec un nombre plein grace a floor
+
+            this.pomme = [this.leJeu.s.rect(posX*this.leJeu.grandeurCarre, posY*this.leJeu.grandeurCarre, this.leJeu.grandeurCarre, this.leJeu.grandeurCarre ).attr({fill:'red'}), posX, posY]; //creer un rectangle de 20 par 20 dans une des colonnes aleatopires, et un tableau
+        }
+
+        supprimePomme(){
+            this.pomme[0].remove(); //supprime l'element 0 du tableau
         }
     }
 
