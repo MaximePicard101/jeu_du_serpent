@@ -35,6 +35,11 @@ document.addEventListener("DOMContentLoaded", function(event) {
             this.pomme = undefined;
         }
 
+        if(this.serpent !== undefined){
+            this.serpent.supprimeSerpent();
+            this.serpent = undefined;
+        }
+
         }
 
         affichagePointage(_lePointage){
@@ -126,11 +131,21 @@ document.addEventListener("DOMContentLoaded", function(event) {
             }
 
             if(!this.touche){ //si je ne touche pas au limites, on creer un nouvceau serpent
+
+                if(this.currentX === this.leJeu.pomme.pomme[1] && this.currentY === this.leJeu.pomme.pomme[2]){
+                    this.serpentLongueur ++;
+
+                    this.leJeu.affichagePointage(this.serpentLongueur);
+
+                    this.leJeu.pomme.supprimePomme();
+                    this.leJeu.pomme.ajoutePomme();
+                }
+
             this.dessineCarre(nextX, nextY); //dessine carre a la position courante;
             this.currentX = nextX;
             this.currentY = nextY;
             }
-
+            }
 
         dessineCarre(x, y){
 
@@ -146,7 +161,12 @@ document.addEventListener("DOMContentLoaded", function(event) {
         }
 
         supprimeSerpent(){
+            clearInterval(this.timing);
 
+            while(this.tblCarreSerpent.length >0){
+                this.tblCarreSerpent[0][0].remove();
+                this.tblCarreSerpent.shift();
+            }
         }
 
     }
