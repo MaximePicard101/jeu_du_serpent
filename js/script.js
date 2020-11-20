@@ -64,6 +64,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
             this.serpentLongueur = 1;
             this.tblCarreSerpent = [];
 
+            this.touche = false;  //je ne touche pas aux limites
+
             this.vitesse = 250;
             this.timing = setInterval(this.controleSerpent.bind(this), this.vitesse);
 
@@ -108,12 +110,38 @@ document.addEventListener("DOMContentLoaded", function(event) {
             var nextX = this.currentX + this.nextMoveX;  // Associe position actuel avec son deplacement selon les fleches
             var nextY = this.currentY + this.nextMoveY;
 
+            this.tblCarreSerpent.forEach(function(element){
+                if(nextX === element[1] && nextY === element[2]){ //si je touche moi-meme, meme position qu'un corps ancien du serpent
+                    this.leJeu.finPartie();
+                    this.touche=true;
+                }
+        }.bind(this));
+
+            if(nextY < 0 || nextX < 0 || nextY > this.leJeu.grandeurGrille-1 || nextX > this.leJeu.grandeurGrille-1){
+
+                console.log("Touche limite!");
+                this.leJeu.finPartie();
+                this.touche = true;
+
+            }
+
+            if(!this.touche){ //si je ne touche pas au limites, on creer un nouvceau serpent
             this.dessineCarre(nextX, nextY); //dessine carre a la position courante;
             this.currentX = nextX;
             this.currentY = nextY;
-        }
+            }
+
 
         dessineCarre(x, y){
+
+            var unCarre = [this.leJeu.s.rect(x * this.leJeu.grandeurCarre, y * this.leJeu.grandeurCarre, this.leJeu.grandeurCarre, this.leJeu.grandeurCarre), x, y]; //creer un carré de 20x20 a la position courante
+
+            this.tblCarreSerpent.push(unCarre);
+
+            if(this.tblCarreSerpent.length > this.serpentLongueur){
+                this.tblCarreSerpent[0][0].remove();
+                this.tblCarreSerpent.shift();
+            }
 
         }
 
